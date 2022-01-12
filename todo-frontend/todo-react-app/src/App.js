@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Todo from './Todo';
 import { useState } from 'react';
@@ -8,12 +7,7 @@ import AddTodo from './AddTodo';
 const App = () => {
 
   const [state, setState] = useState({
-    items: [
-      { id: "0", title: "myWorld1", done: true },
-      { id: "1", title: "myWorld2", done: false },
-      { id: "2", title: "myWorld1", done: true },
-      { id: "3", title: "myWorld2", done: false }
-    ]
+    items: []
   });
 
   let todoItems = state.items.length > 0 && (
@@ -26,10 +20,18 @@ const App = () => {
     </Paper>
   );
 
+  const add = (item) => {
+    const thisItems = state.items;
+    item.id = "ID-" + thisItems.length;
+    item.done = false;
+    thisItems.push(item);
+    setState({ items: thisItems });
+  };
+
   return (
     <div className="App">
       <Container maxWidth="md">
-        <AddTodo />
+        <AddTodo add={add} />
         <div className="TodoList">{todoItems}</div>
       </Container>
     </div >
