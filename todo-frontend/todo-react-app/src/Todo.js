@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Checkbox, InputBase, ListItem, ListItemText } from "@material-ui/core";
+import { Checkbox, IconButton, InputBase, ListItem, ListItemSecondaryAction, ListItemText } from "@material-ui/core";
+import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 
 const Todo = (props) => {
 
     const [state, setState] = useState({ item: props.item });
+    const deleteItem = props.deleteItem;
 
     const item = state.item;
+
+    const deleteEventHandler = () => {
+        deleteItem(state.item);
+    }
+
     return (
         <ListItem>
             <Checkbox checked={item.done} />
@@ -20,6 +27,14 @@ const Todo = (props) => {
                     fullWidth={true}
                 />
             </ListItemText>
+
+            <ListItemSecondaryAction>
+                <IconButton
+                    aria-label="Delete Todo"
+                    onClick={deleteEventHandler}>
+                    <DeleteOutlined />
+                </IconButton>
+            </ListItemSecondaryAction>
         </ListItem>
     );
 }

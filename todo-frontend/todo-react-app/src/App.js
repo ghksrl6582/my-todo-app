@@ -10,16 +10,6 @@ const App = () => {
     items: []
   });
 
-  let todoItems = state.items.length > 0 && (
-    <Paper style={{ margin: 16 }}>
-      <List>
-        {state.items.map((item, idx) => (
-          <Todo item={item} />
-        ))}
-      </List>
-    </Paper>
-  );
-
   const add = (item) => {
     const thisItems = state.items;
     item.id = "ID-" + thisItems.length;
@@ -27,6 +17,24 @@ const App = () => {
     thisItems.push(item);
     setState({ items: thisItems });
   };
+
+  const deleteItem = (item) => {
+    const thisItems = state.items;
+    const newItems = thisItems.filter(e => e.id !== item.id);
+    setState({ items: newItems }, () => {
+      console.log("Update Items : ", state.items)
+    });
+  };
+
+  let todoItems = state.items.length > 0 && (
+    <Paper style={{ margin: 16 }}>
+      <List>
+        {state.items.map((item, idx) => (
+          <Todo item={item} deleteItem={deleteItem} />
+        ))}
+      </List>
+    </Paper>
+  );
 
   return (
     <div className="App">
