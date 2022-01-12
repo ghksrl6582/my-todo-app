@@ -2,7 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import Todo from './Todo';
 import { useState } from 'react';
-import { List, Paper } from '@material-ui/core';
+import { Container, List, Paper } from '@material-ui/core';
+import AddTodo from './AddTodo';
 
 const App = () => {
 
@@ -26,7 +27,12 @@ const App = () => {
   );
 
   return (
-    <div className="App">{todoItems}</div >
+    <div className="App">
+      <Container maxWidth="md">
+        <AddTodo />
+        <div className="TodoList">{todoItems}</div>
+      </Container>
+    </div >
   );
 }
 
