@@ -1,6 +1,7 @@
 import { Container, List, Paper } from "@material-ui/core";
 import React from "react";
 import AddTodo from "./AddTodo";
+import { call } from "./service/ApiService";
 import Todo from "./Todo";
 
 class App extends React.Component {
@@ -11,18 +12,32 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    call("/todo", "GET", null)
+      .then((response) => {
+        this.setState({ items: response.data })
+      });
+  }
+
   add = (item) => {
-    const thisItems = this.state.items;
-    item.id = "ID-" + thisItems.length;
-    item.done = false;
-    thisItems.push(item);
-    this.setState({ items: thisItems });
+    call("/todo", "POST", item)
+      .then((response) => {
+        this.setState({ items: response.data })
+      });
   }
 
   deleteItem = (item) => {
-    const thisItems = this.state.items;
-    const newItems = thisItems.filter(e => e.id !== item.id);
-    this.setState({ items: newItems });
+    call("/todo", "DELETE", item)
+      .then((response) => {
+        this.setState({ items: response.data })
+      });
+  }
+
+  update = (item) => {
+    call("/todo", "PUT", item)
+      .then((response) => {
+        this.setState({ items: response.data })
+      });
   }
 
   render() {
@@ -31,7 +46,9 @@ class App extends React.Component {
       <Paper style={{ margin: 16 }}>
         <List>
           {this.state.items.map((item, idx) => (
-            <Todo item={item} key={item.id} deleteItem={this.deleteItem} />
+            <Todo item={item} key={item.id}
+              deleteItem={this.deleteItem}
+              update={this.update} />
           ))}
         </List>
       </Paper>
