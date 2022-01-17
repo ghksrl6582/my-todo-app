@@ -108,7 +108,7 @@ public class TodoController {
 
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            var response = ResponseDTO.<TodoDTO>builder()
+            var response = ResponseDTO.builder()
                     .error(e.getMessage())
                     .build();
 
