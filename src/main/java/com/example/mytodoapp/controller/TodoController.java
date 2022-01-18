@@ -6,6 +6,7 @@ import com.example.mytodoapp.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -18,10 +19,11 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<?> createTodo(@RequestBody TodoDTO dto) {
+    public ResponseEntity<?> createTodo(
+            @AuthenticationPrincipal String userId,
+            @RequestBody TodoDTO dto) {
 
         try {
-            String userId = "temp-user";
 
             var entity = TodoDTO.toEntity(dto);
             entity.setId(null);
@@ -47,9 +49,9 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<?> retrieveTodoList() {
-        String userId = "temp-user";
-
+    public ResponseEntity<?> retrieveTodoList(
+            @AuthenticationPrincipal String userId
+    ) {
         var entities = todoService.retrieve(userId);
 
         var dtos = entities.stream().map(TodoDTO::new)
@@ -63,11 +65,11 @@ public class TodoController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateTodo(@RequestBody TodoDTO dto) {
+    public ResponseEntity<?> updateTodo(
+            @AuthenticationPrincipal String userId,
+            @RequestBody TodoDTO dto) {
 
         try {
-            String userId = "temp-user";
-
             var entity = TodoDTO.toEntity(dto);
 
             entity.setUserId(userId);
@@ -91,10 +93,10 @@ public class TodoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteTodo(@RequestBody TodoDTO dto) {
+    public ResponseEntity<?> deleteTodo(
+            @AuthenticationPrincipal String userId,
+            @RequestBody TodoDTO dto) {
         try {
-            String userId = "temp-user";
-
             var entity = TodoDTO.toEntity(dto);
             entity.setUserId(userId);
 

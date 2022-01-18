@@ -8,6 +8,7 @@ import com.example.mytodoapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +23,15 @@ public class UserController {
 
     private final TokenProvider tokenProvider;
 
+    private final PasswordEncoder encoder;
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
             var user = UserEntity.builder()
                     .email(userDTO.getEmail())
                     .userName(userDTO.getUserName())
-                    .password(userDTO.getPassword())
+                    .password(encoder.encode(userDTO.getPassword()))
                     .build();
 
             var registeredUser = userService.create(user);
@@ -51,7 +54,7 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
         var user = userService.getByCredentials(
-                userDTO.getEmail(), userDTO.getPassword());
+                userDTO.getEmail(), userDTO.getPassword(), encoder);
 
         if (user != null) {
             final String token = tokenProvider.create(user);
