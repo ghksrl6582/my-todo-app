@@ -3,6 +3,7 @@ import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import App from "./App";
 import Login from "./Login";
+import SignUp from "./SignUp";
 
 function CopyRight() {
     return (
@@ -23,6 +24,7 @@ class AppRouter extends React.Component {
                         <Routes>
                             <Route path="/login" element={<Login />} />
                             <Route path="/" element={<App />} />
+                            <Route path="/signup" element={<SignUp />} />
                         </Routes>
                     </div>
                     <Box mt={5}>

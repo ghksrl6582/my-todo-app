@@ -1,8 +1,8 @@
 import { Button, Container, Grid, Link, TextField, Typography } from "@material-ui/core";
 import React from "react";
-import { signin } from "./service/ApiService";
+import { signup } from "./service/ApiService";
 
-class Login extends React.Component {
+class SignUp extends React.Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -11,46 +11,60 @@ class Login extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.target);
+        const userName = data.get("username");
         const email = data.get("email");
         const password = data.get("password");
 
-        signin({ email: email, password: password });
+        signup({
+            email: email, userName: userName, password: password
+        })
+            .then((response) => {
+                window.location.href = "/login";
+            });
     }
 
     render() {
         return (
             <Container component="main" maxWidth="xs" style={{ marginTop: "8%" }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Typography component="h1" variant="h5">
-                            로그인
-                        </Typography>
-                    </Grid>
-                </Grid>
                 <form noValidate onSubmit={this.handleSubmit}>
-                    {" "}
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
+                            <Typography component="h1" variant="h5">계정생성</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
                             <TextField
+                                autoComplete="fname"
+                                name="username"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="username"
+                                label="사용자 이름"
+                                autoFocus
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                autoComplete="email"
+                                name="email"
                                 variant="outlined"
                                 required
                                 fullWidth
                                 id="email"
                                 label="이메일 주소"
-                                name="email"
-                                authComplete="email"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                autoComplete="current-password"
+                                name="password"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                name="password"
+                                id="password"
                                 label="패스워드"
                                 type="password"
-                                id="password"
-                                autoComplete="current-password"
+                                autoFocus
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -59,14 +73,14 @@ class Login extends React.Component {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                            >로그인</Button>
+                            >계정 생성</Button>
                         </Grid>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="/signup" variant="body2">
-                                    계정이 없습니까? 여기서 가입 하세요.
-                                </Link>
-                            </Grid>
+                    </Grid>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item>
+                            <Link href="/login" variant="body2">
+                                이미 계정이 있습니까? 로그인 하세요.
+                            </Link>
                         </Grid>
                     </Grid>
                 </form>
@@ -75,4 +89,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default SignUp;
